@@ -286,12 +286,16 @@ class PDFMerger
 			{
 				for($i=1; $i<=$count; $i++)
 				{
-					$template = $fpdi->importPage($i);
-					$size = $fpdi->getTemplateSize($template);
-					$orientation = ($size['h'] > $size['w']) ? 'P' : 'L';
+					try {
+                        			$template = $fpdi->importPage($i);
+                        			$size = $fpdi->getTemplateSize($template);
+                        			$orientation = ($size['h'] > $size['w']) ? 'P' : 'L';
 
-					$fpdi->AddPage($orientation, array($size['w'], $size['h']));
-					$fpdi->useTemplate($template);
+                       				$fpdi->AddPage($orientation, array($size['w'], $size['h']));
+                        			$fpdi->useTemplate($template);
+                    			} catch(\Exception $e) {
+						error_log('Une erreur est survenue avec le fichier : '.$filename.' (Erreur : '.$e->getMessage().')');
+                    			}
 				}
 			}
 			else
